@@ -43,3 +43,7 @@ mechPeds = {
                   
                 ]]
                 }
+
+---- Orjinal AI Mechanic : https://forum.fivem.net/t/release-ai-mechanic/756664
+
+---- EMS edited by benpazzo: https://forum.fivem.net/u/KomsuTeyze/activity
