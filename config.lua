@@ -2,7 +2,7 @@
 -- C o n f i g s --
 -------------------
 Config = {}
-Config.doktor = 0
+Config.doktor = 2
 
 companyName = "Merkez Hastanesi"       
 companyIcon = "CHAR_CALL911" -- https://wiki.gtanet.work/index.php?title=Notification_Pictures
