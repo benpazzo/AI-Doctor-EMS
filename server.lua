@@ -1,3 +1,6 @@
+Config = {}
+Config.Ucret = 2000
+
 local CopsConnected  = 0
 ESX = nil
 
@@ -27,3 +30,26 @@ ESX.RegisterServerCallback('ai_mechanic:doktor', function(source, cb)
 
 	cb(CopsConnected)
 end)
+
+RegisterServerEvent('ai_mechanic:odeme')
+AddEventHandler('ai_mechanic:odeme', function(source)
+	local _source = source
+	local xPlayer = ESX.GetPlayerFromId(_source)
+	
+	if xPlayer.getBank() >= Config.Ucret then
+
+	xPlayer.removeBank(Config.Ucret)
+	TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'success', text = 'Muayene için $2000 ödeme yaptın.' })
+	TriggerClientEvent('knb:mech', source)
+	
+	else
+	
+	TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'error', text = 'Bankanda yeteri kadar para yok.' })
+	
+	end
+end)
+
+
+TriggerEvent('es:addCommand', 'doktor', function(source)
+    TriggerEvent('ai_mechanic:odeme', source)
+    end)

@@ -2,10 +2,7 @@ ESX = nil
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
-RegisterCommand("doktor", function(source, args)   -- Modify the "mechanic" value to change activation command.
-    TriggerEvent("knb:mech")
-end, false)
-
+RegisterNetEvent("knb:mech")
 AddEventHandler("knb:mech", function()
     player = GetPlayerPed(-1)
     playerPos = GetEntityCoords(player)
@@ -38,7 +35,7 @@ AddEventHandler("knb:mech", function()
 		end
 		playRadioAnim(player)
 		ESX.TriggerServerCallback('ai_mechanic:doktor', function(CopsConnected)
-		if CopsConnected < Config.doktor then
+		if CopsConnected >= Config.doktor then
 		exports['mythic_notify']:DoHudText('error', 'Yeteri kadar doktor olduğu için kullanılamıyor.')
 		else
 		ClearPedTasksImmediately(player)
