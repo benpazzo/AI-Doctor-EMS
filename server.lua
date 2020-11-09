@@ -2,6 +2,7 @@ Config = {}
 Config.Ucret = 2000
 
 local CopsConnected  = 0
+
 ESX = nil
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
@@ -25,31 +26,27 @@ end
 CountCops()
 
 
-ESX.RegisterServerCallback('ai_mechanic:doktor', function(source, cb)
+ESX.RegisterServerCallback('pazzodoktor:doktor', function(source, cb)
 	local xPlayer = ESX.GetPlayerFromId(source)
 
 	cb(CopsConnected)
 end)
 
-RegisterServerEvent('ai_mechanic:odeme')
-AddEventHandler('ai_mechanic:odeme', function(source)
+RegisterServerEvent('pazzodoktor:odeme')
+AddEventHandler('pazzodoktor:odeme', function()
 	local _source = source
 	local xPlayer = ESX.GetPlayerFromId(_source)
-	
-	if xPlayer.getBank() >= Config.Ucret then
 
-	xPlayer.removeBank(Config.Ucret)
-	TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'success', text = 'Muayene için $2000 ödeme yaptın.' })
-	TriggerClientEvent('knb:mech', source)
-	
-	else
-	
-	TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'error', text = 'Bankanda yeteri kadar para yok.' })
-	
-	end
+	local _source = source
+	local xPlayer = ESX.GetPlayerFromId(_source)
+	TriggerEvent('esx_addonaccount:getSharedAccount', 'society_ambulance', function(account)
+              account.addMoney(Config.Ucret)
+              xPlayer.removeBank(Config.Ucret)
+			  end)
 end)
 
+ESX.RegisterServerCallback('pazzodoktor:checkMoney', function(source, cb)
+	local xPlayer = ESX.GetPlayerFromId(source)
 
-TriggerEvent('es:addCommand', 'doktor', function(source)
-    TriggerEvent('ai_mechanic:odeme', source)
-    end)
+	cb(xPlayer.getBank('money') >= Config.Ucret)
+end)
