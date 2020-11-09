@@ -38,7 +38,7 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
 	if bekleme then
-	if IsControlJustReleased(0, Keys['G']) then
+	if IsControlJustReleased(0, Keys['G']) and isDead then
 	ESX.TriggerServerCallback('pazzodoktor:checkMoney', function(hasEnoughMoney)
 	if hasEnoughMoney then
 	ESX.TriggerServerCallback('pazzodoktor:doktor', function(CopsConnected)
