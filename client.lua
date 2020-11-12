@@ -35,25 +35,25 @@ AddEventHandler('esx:playerLoaded', function(xPlayer)
 end)
 
 Citizen.CreateThread(function()
-  while true do
-    Citizen.Wait(0)
-	if bekleme then
-	if IsControlJustReleased(0, Keys['G']) and isDead then
-	ESX.TriggerServerCallback('pazzodoktor:checkMoney', function(hasEnoughMoney)
-	if hasEnoughMoney then
-	ESX.TriggerServerCallback('pazzodoktor:doktor', function(CopsConnected)
-	if CopsConnected <= Config.doktor then
-	TriggerEvent("pazzodoktor:canlan")
-	TriggerServerEvent('pazzodoktor:odeme')
-	bekleme = false
-	end
-		end)
-		end
+    while true do
+        Citizen.Wait(0)
+	    if bekleme then
+	        if IsControlJustReleased(0, Keys['G']) and isDead then
+	            ESX.TriggerServerCallback('pazzodoktor:checkMoney', function(hasEnoughMoney)
+	                if hasEnoughMoney then
+	                    ESX.TriggerServerCallback('pazzodoktor:doktor', function(CopsConnected)
+	                        if CopsConnected <= Config.doktor then
+	                            TriggerEvent("pazzodoktor:canlan")
+	                            TriggerServerEvent('pazzodoktor:odeme')
+	                            bekleme = false
+	                        end
+		                end)
+		            end
 				end)
-					end
-						end
-						end
-	end)
+			end
+		end
+	end
+end)
 
 AddEventHandler("pazzodoktor:canlan", function()
     player = GetPlayerPed(-1)
