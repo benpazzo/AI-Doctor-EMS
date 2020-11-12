@@ -8,7 +8,7 @@ Resource for giving you medical treatment if there is not any doctors online on 
 * locale options for different languages
 
 ### Needed resources
-* [ESX Framework V1.1 and V1.2 final](https://github.com/esx-framework)
+* [ESX Framework V1.1 or V1.2 final](https://github.com/esx-framework)
 * [Mythic_progbar(optional)]()
 
 
