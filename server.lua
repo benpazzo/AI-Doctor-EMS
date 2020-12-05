@@ -1,52 +1,42 @@
-Config = {}
-Config.Ucret = 2000
-
-local CopsConnected  = 0
-
 ESX = nil
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
-function CountCops()
 
+
+ESX.RegisterServerCallback('pazzodoktor:doktorsOnline', function(source, cb)
+	local xPlayer = ESX.GetPlayerFromId(source)
 	local xPlayers = ESX.GetPlayers()
-
-	CopsConnected = 0
+	local medicsOnline = 0
+	local enoughMoney = false
+	if xPlayer.getMoney() >= Config.Price then
+		enoughMoney = true
+	else
+		if xPlayer.getAccount('bank').money >= Config.Price then
+		    enoughMoney = true
+		end
+	end
 
 	for i=1, #xPlayers, 1 do
 		local xPlayer = ESX.GetPlayerFromId(xPlayers[i])
 		if xPlayer.job.name == 'ambulance' then
-			CopsConnected = CopsConnected + 1
+			medicsOnline = medicsOnline + 1
 		end
 	end
 
-	SetTimeout(120 * 1000, CountCops)
-end
-
-CountCops()
-
-
-ESX.RegisterServerCallback('pazzodoktor:doktor', function(source, cb)
-	local xPlayer = ESX.GetPlayerFromId(source)
-
-	cb(CopsConnected)
+	cb(medicsOnline, enoughMoney)
 end)
 
 RegisterServerEvent('pazzodoktor:odeme')
 AddEventHandler('pazzodoktor:odeme', function()
 	local _source = source
 	local xPlayer = ESX.GetPlayerFromId(_source)
-
-	local _source = source
-	local xPlayer = ESX.GetPlayerFromId(_source)
 	TriggerEvent('esx_addonaccount:getSharedAccount', 'society_ambulance', function(account)
-              account.addMoney(Config.Ucret)
-              xPlayer.removeBank(Config.Ucret)
-			  end)
-end)
-
-ESX.RegisterServerCallback('pazzodoktor:checkMoney', function(source, cb)
-	local xPlayer = ESX.GetPlayerFromId(source)
-
-	cb(xPlayer.getBank('money') >= Config.Ucret)
+		account.addMoney(Config.Price)
+		if xPlayer.getMoney() >= Config.Price then
+			xPlayer.removeMoney(Config.Price)
+		else
+			xPlayer.removeAccountMoney('bank', Config.Price)
+		end
+	end)
 end)
