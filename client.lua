@@ -31,15 +31,15 @@ RegisterCommand("aimedic", function(source, args, raw)
 					TriggerServerEvent('pazzodoktor:odeme')
 					bekleme = false
 				else
-					if EMSOnline >= Config.Doktor then
-					    ESX.ShowNotification(_U('to_many_medics'))
+					if EMSOnline > Config.Doktor then
+						notification(_U('to_many_medics'))
 					else
-						ESX.ShowNotification(_U('not_enough_money'))
+						notification(_U('not_enough_money'))
 					end	
 				end
 			end)
 		else
-			ESX.ShowNotification(_U('only_when_dead'))
+			notification(_U('only_when_dead'))
 		end
 	end)
 end)
@@ -81,7 +81,7 @@ end
 function cagirma(DoktorP)
 	if Config.MythicProgbar then
         exports['mythic_progbar']:Progress({
-        	name = "unique_action_name",
+        	name = "AI-Doctor_givingtreatment",
         	duration = 20000,
         	label = _U('getting_treatment'),
         	useWhileDead = true,
@@ -97,16 +97,30 @@ function cagirma(DoktorP)
         	ClearPedTasks(DoktorP)
 			Tedavi(DoktorP)
 	else
-		ESX.ShowNotification(_U('getting_treatment'))
+		notification(_U('getting_treatment'))
+		Citizen.Wait(20000)
+        ClearPedTasks(DoktorP)
+		Tedavi(DoktorP)
 	end	
 end
 
 function Tedavi(DoktorP)
     Citizen.Wait(500)
 	TriggerEvent('esx_ambulancejob:revive')
-	exports['mythic_notify']:DoHudText('success', _U('treatment_done')..Config.Price..Config.MoneyFormat)
+	notification(_U('treatment_done')..Config.Price..Config.MoneyFormat, 'success')
 	RemovePedElegantly(DoktorP)
 	bekleme = true
+end
+
+function notification(text, type)
+	if Config.MythicNotify then
+		if type == nil then
+			type = 'inform'
+		end
+    	exports['mythic_notify']:DoHudText(type, text)
+	else
+		ESX.ShowNotification(text)
+	end
 end
 
 function loadAnimDict(dict)
